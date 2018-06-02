@@ -10,7 +10,7 @@ namespace JPanAdvDataStructure
 {
     public class SkipList<T> : ICollection<T> where T : IComparable<T>
     {
-        Node head;
+        public Node head = new Node();
         Node[] collection;
 
         public class Node
@@ -22,6 +22,7 @@ namespace JPanAdvDataStructure
             {
                 Value = value;
             }
+            public Node() { }
         }
 
         public SkipList() { }
@@ -33,14 +34,15 @@ namespace JPanAdvDataStructure
                 throw new NotImplementedException();
             }
         }
-        public void ChooseRandomHeight(Node node)
+        private void ChooseRandomHeight(Node node)
         {
             Random rand = new Random();
-            while (rand.Next(0, 1) == 0 && node.Height < head.Height + 1)
+            int temp = rand.Next(0, 1);
+            while (temp == 0 && node.Height < head.Height + 1)
             {
+                temp = rand.Next(0, 2);
                 node.Height++;
             }
-            node.Nexts = new Node[node.Height];
             if (head.Height < node.Height)
             {
                 head.Height = node.Height;
@@ -57,7 +59,7 @@ namespace JPanAdvDataStructure
             AddItem(node, head);
         }
 
-        public void AddItem(Node node, Node curr)
+        private void AddItem(Node node, Node curr)
         {
             //move down
             for (int level = curr.Nexts.Length - 1; level >= 0; level--)
@@ -106,11 +108,23 @@ namespace JPanAdvDataStructure
 
         public bool Remove(T item)
         {
-            RemoveItem()
+            return RemoveItem(item, head);
         }
-        public bool RemoveItem(, Node curr)
+        private bool RemoveItem(T item, Node curr)
         {
-
+            //move down
+            for (int level = curr.Nexts.Length - 1; level >= 0; level--)
+            {
+                if (curr.Nexts[level].Value.CompareTo(item) == 0)
+                {
+                    curr.Nexts = curr.Nexts[level].Nexts;
+                }
+                else if (curr.Nexts[level].Value.CompareTo(item) < 0)
+                {
+                    curr = curr.Nexts[level];
+                }
+            }
+            return true;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -118,6 +132,21 @@ namespace JPanAdvDataStructure
             return GetEnumerator();
         }
 
-
+        public bool Search(T item, Node curr)
+        {
+            //move down
+            for (int level = curr.Nexts.Length - 1; level >= 0; level--)
+            {
+                if (curr.Nexts[level].Value.CompareTo(item) == 0)
+                {
+                    return true;
+                }
+                else if (curr.Nexts[level].Value.CompareTo(item) < 0)
+                {
+                    curr = curr.Nexts[level];
+                }
+            }
+            return false;
+        }
     }
 }
