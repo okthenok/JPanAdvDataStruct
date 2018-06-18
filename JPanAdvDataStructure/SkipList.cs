@@ -11,7 +11,7 @@ namespace JPanAdvDataStructure
     public class SkipList<T> : ICollection<T> where T : IComparable<T>
     {
         public Node head = new Node();
-        Node[] collection;
+        public Node[] collection;
 
         public class Node
         {
@@ -25,7 +25,7 @@ namespace JPanAdvDataStructure
             public Node() { }
         }
 
-        public SkipList() { }
+        public SkipList() { head.Nexts = new Node[2]; }
 
         public int Count
         {
@@ -46,8 +46,14 @@ namespace JPanAdvDataStructure
             if (head.Height < node.Height)
             {
                 head.Height = node.Height;
+                var hReplacement = head.Nexts;
                 head.Nexts = new Node[head.Height];
+                for (int i = 0; i < hReplacement.Length; i++)
+                {
+                    head.Nexts[i] = hReplacement[i];
+                }
             }
+            node.Nexts = new Node[node.Height];
         }
 
         public bool IsReadOnly => false;
@@ -62,11 +68,11 @@ namespace JPanAdvDataStructure
         private void AddItem(Node node, Node curr)
         {
             //move down
-            for (int level = curr.Nexts.Length - 1; level >= 0; level--)
+            for (int level = curr.Height - 1; level >= 0; level--)
             {
                 if (curr.Nexts[level] == null || curr.Nexts[level].Value.CompareTo(node.Value) > 0)
                 {
-                    if (node.Height < level)
+                    if (level < node.Height)
                     {
                         //link curr
                         node.Nexts[level] = curr.Nexts[level];
@@ -110,7 +116,7 @@ namespace JPanAdvDataStructure
         {
             return RemoveItem(item, head);
         }
-        private bool RemoveItem(T item, Node curr)
+        private bool RemoveItem(T item, Node curr) //this part has an issue
         {
             //move down
             for (int level = curr.Nexts.Length - 1; level >= 0; level--)
@@ -121,7 +127,7 @@ namespace JPanAdvDataStructure
                 }
                 else if (curr.Nexts[level].Value.CompareTo(item) < 0)
                 {
-                    curr = curr.Nexts[level];
+                    curr = curr.Nexts[level]; //probably something wrong with this part (moving onto next node)
                 }
             }
             return true;
