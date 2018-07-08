@@ -10,6 +10,13 @@ namespace JPanAdvDataStructure
     {
         static void Main(string[] args)
         {
+            //Derp derp = null;
+
+            //if (derp?.x == 3)
+            //{
+            //    Console.WriteLine("Hello World");
+            //}
+            //Console.WriteLine("Hello World");
         }
     }
 }

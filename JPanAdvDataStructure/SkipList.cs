@@ -123,11 +123,12 @@ namespace JPanAdvDataStructure
             {
                 if (curr.Nexts[level].Value.CompareTo(item) == 0)
                 {
-                    curr.Nexts = curr.Nexts[level].Nexts;
+                    curr.Nexts[level] = curr.Nexts[level].Nexts[level];
                 }
                 else if (curr.Nexts[level].Value.CompareTo(item) < 0)
                 {
-                    curr = curr.Nexts[level]; //probably something wrong with this part (moving onto next node)
+                    curr = curr.Nexts[level];
+                    level++;
                 }
             }
             return true;
