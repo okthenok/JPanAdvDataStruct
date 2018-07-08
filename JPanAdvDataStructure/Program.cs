@@ -17,6 +17,21 @@ namespace JPanAdvDataStructure
             //    Console.WriteLine("Hello World");
             //}
             //Console.WriteLine("Hello World");
+            int input = int.Parse(Console.ReadLine());
+            int divisor = 1073741824;
+            string output = "";
+            while (divisor != 1)
+            {
+                if (input % divisor != input)
+                {
+                    output += "1";
+                    input -= divisor;
+                }
+                else
+                {
+                    output += "0";
+                }
+            }
         }
     }
 }

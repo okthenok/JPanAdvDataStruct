@@ -38,7 +38,19 @@ namespace AdvUnitTest
             list.Remove(24);
             Assert.IsTrue(list.head.Nexts[0].Value == 2 && list.head.Nexts[0].Nexts[0].Value == 5
                 && list.head.Nexts[0].Nexts[0].Nexts[0].Value == 17 && list.head.Nexts[0].Nexts[0].Nexts[0].Nexts[0].Value == 67);
-        } //adding is fine, but removing makes inconsistent deletions and makes weird things happen 
-        //sometimes only last check fails, sometimes first check fails
+        } 
+        [TestMethod]
+        public void HashMapAddDelete5()
+        {
+            HashMap<int, int> hashMap = new HashMap<int, int>();
+            hashMap.Add(1, 5);
+            hashMap.Add(19, 17);
+            hashMap.Add(7, 14);
+            hashMap.Add(46, 18);
+            hashMap.Add(6, 13);
+            hashMap.Remove(7);
+            int value;
+            Assert.IsTrue(hashMap.TryGetValue(19, out value));
+        }
     }
 }
