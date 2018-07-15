@@ -7,11 +7,6 @@ using System.Threading.Tasks;
 
 namespace JPanAdvDataStructure
 {
-    //class Derp
-    //{
-    //    public int x;
-    //}
-
     public class HashMap<TKey, TValue> : IDictionary<TKey, TValue>
     {
         //variables
@@ -60,17 +55,47 @@ namespace JPanAdvDataStructure
         #region idictionary and iequalitycomparer stuff
 
 
-
         public TValue this[TKey key]
         {
             get
             {
-                throw new NotImplementedException();
+                //using the key, find the value and return it
+                //if the key doesnt exist
+                //return value
+                for (int i = 0; i < Capacity; i++)
+                {
+                    if (pairs[i] == null) continue;
+                    foreach (KeyValuePair<TKey, TValue> pair in pairs[i])
+                    {
+                        if (comparer.Equals(key, pair.Key)) return pair.Value;
+                    }
+                }
+                throw new KeyNotFoundException();
             }
 
             set
             {
-                throw new NotImplementedException();
+                //using the key, find the value and change it to 
+                if (ContainsKey(key))
+                {
+                    for (int i = 0; i < Capacity; i++)
+                    {
+                        if (pairs[i] == null) continue;
+                        foreach (KeyValuePair<TKey, TValue> pair in pairs[i])
+                        {
+                            if (comparer.Equals(key, pair.Key))
+                            {
+                                pairs[i].Remove(pair);
+                                pairs[i].AddFirst(new KeyValuePair<TKey, TValue>(key, value));
+                                return;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Add(key, value);
+                }
             }
         }
 
@@ -78,21 +103,9 @@ namespace JPanAdvDataStructure
         //explicit interface implementation
         public bool IsReadOnly => false;
 
-        public ICollection<TKey> Keys
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public ICollection<TKey> Keys => this.Select(x => x.Key).ToList();
 
-        public ICollection<TValue> Values
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public ICollection<TValue> Values => this.Select(x => x.Value).ToList();
 
         //explicit interface implementation (optionally)
         public void Add(KeyValuePair<TKey, TValue> item)
@@ -115,7 +128,7 @@ namespace JPanAdvDataStructure
                 pairs[index] = new LinkedList<KeyValuePair<TKey, TValue>>();
             }
             //if the current linked list contains the key or not
-            if(pairs[index].Select(x => x.Key).Contains(key))
+            if (pairs[index].Select(x => x.Key).Contains(key))
             {
                 throw new Exception("big bad");
             }
@@ -127,28 +140,40 @@ namespace JPanAdvDataStructure
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < pairs.Length; i++)
+            {
+                pairs[i] = null;
+            }
+            pairs = new LinkedList<KeyValuePair<TKey, TValue>>[defaultCapacity];
         }
 
-        public bool Contains(KeyValuePair<TKey, TValue> item)
+        public bool Contains(KeyValuePair<TKey, TValue> item) //dont need
         {
             throw new NotImplementedException();
         }
 
-        public bool ContainsKey(TKey key)
+        public bool ContainsKey(TKey key) //needs
+        {
+            for (int i = 0; i < pairs.Length; i++)
+            {
+                if (pairs[i] == null) continue;
+                foreach (KeyValuePair<TKey, TValue> pair in pairs[i])
+                {
+                    if (comparer.Equals(key, pair.Key))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) //dont need
         {
             throw new NotImplementedException();
         }
 
-        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
 
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
@@ -195,9 +220,14 @@ namespace JPanAdvDataStructure
             return false;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() //dont need? do later?
         {
             throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
         #endregion
     }
