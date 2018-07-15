@@ -10,6 +10,18 @@ namespace JPanAdvDataStructure
     {
         static void Main(string[] args)
         {
+
+            MyLinkedList<int> myLL = new MyLinkedList<int>();
+            myLL.AddEnd(5);
+            myLL.AddEnd(42);
+            myLL.AddEnd(18);
+
+            foreach(int item in myLL)
+            {
+                Console.WriteLine(item);
+            }
+
+
             //Derp derp = null;
 
             //if (derp?.x == 3)
@@ -31,6 +43,7 @@ namespace JPanAdvDataStructure
                 {
                     output += "0";
                 }
+                divisor = divisor / 2;
             }
         }
     }

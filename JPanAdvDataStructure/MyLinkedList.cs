@@ -22,6 +22,12 @@ namespace JPanAdvDataStructure
         }
         public void AddEnd(T value)
         {
+            if (head == null)
+            {
+                head = new Node();
+                head.Value = value;
+                return;
+            }
             var curr = head;
             while(curr.Next != null)
             {
@@ -29,6 +35,18 @@ namespace JPanAdvDataStructure
             }
             curr.Next = new Node();
             curr.Next.Value = value;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            Node current = head;
+            while (current != null)
+            {
+                yield return current.Value;
+                current = current.Next;
+            }
+
+            yield return default(T);
         }
     }
 }

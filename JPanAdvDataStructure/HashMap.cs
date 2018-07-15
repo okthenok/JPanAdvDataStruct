@@ -220,9 +220,19 @@ namespace JPanAdvDataStructure
             return false;
         }
 
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() //dont need? do later?
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() 
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < Capacity; i++)
+            {
+                if (pairs[i] == null)
+                {
+                    continue;
+                }
+                foreach (KeyValuePair<TKey, TValue> pair in pairs[i])
+                {
+                    yield return pair;
+                }
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
